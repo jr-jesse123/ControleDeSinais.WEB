@@ -7,6 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="1 - Dominio\Dominio.fs" />
+    <Compile Include="2 - InfraEstrutura\InfraEstrutura.fs" />
     <Compile Include="Models/ErrorViewModel.fs" />
     <Compile Include="Controllers/HomeController.fs" />
     <Compile Include="Program.fs" />
