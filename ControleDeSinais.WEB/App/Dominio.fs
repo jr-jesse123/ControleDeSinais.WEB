@@ -2,6 +2,7 @@
 
 open System
 
+
 type Posicao = {
     NrRack: int
     Coluna: int
@@ -9,26 +10,26 @@ type Posicao = {
 }
 
 // cadastrar somente
-type sinal = {
-    nome: string
-    descricao: string
+type Sinal = {
+    Nome: string
+    Descricao: string
 }
 
 //256 lista permanente
 type Source = {
-    numero:int
+    Numero:int
 }
 
 // 194 - lista permanente
 type Destination = {
-    numero:int 
+    Numero:int 
 }
 
-type entradaPosicao = Source of Source| Destination of Destination | Sinal of sinal
+type entradaPosicao = Source of Source| Destination of Destination | Sinal of Sinal
 
 type PosicaoAssociacao = {
     Posicao: Posicao
-    entradaPosicao: entradaPosicao
+    EntradaPosicao: entradaPosicao
 }
 
 type associacaoPatch = {
@@ -45,10 +46,10 @@ type SinalPlatinum = Source of Source | Destination of Destination
 //historico
 // usuário pode adicionar
 // usuário pode desassociar (criar uma nova associação sem sinal)
-type associacaoPlatinum ={
+type AssociacaoPlatinum ={
     SinalPlatinum: SinalPlatinum * Posicao
-    sinal :  (sinal * Posicao) option
-    dataDeCriacao: DateOnly
+    Sinal :  (Sinal * Posicao) option
+    DataDeCriacao: DateOnly
 }
 
 

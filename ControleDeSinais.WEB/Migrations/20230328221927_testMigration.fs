@@ -8,7 +8,7 @@ open Microsoft.EntityFrameworkCore.Metadata
 open Microsoft.EntityFrameworkCore.Migrations
 open Microsoft.EntityFrameworkCore.Storage.ValueConversion
 
-[<DbContext(typeof<InfraEstrutura.BloggingContext>)>]
+[<DbContext(typeof<InfraEstrutura.Persistencia.BloggingContext>)>]
 [<Migration("20230328221927_testMigration")>]
 type testMigration() =
     inherit Migration()

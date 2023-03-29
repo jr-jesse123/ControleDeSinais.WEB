@@ -26,4 +26,8 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ControleDeSinais.WEB\ControleDeSinais.WEB.fsproj" />
+  </ItemGroup>
+
 </Project>

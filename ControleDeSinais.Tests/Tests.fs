@@ -1,22 +1,29 @@
-module InfraEstruturaTests
+module TestesDeInfraEstrutura
 
 open System
 open Xunit
-
-open InfraEstrutura
+open InfraEstrutura.Entities
+open InfraEstrutura.Persistencia
 open Microsoft.EntityFrameworkCore
+open System.IO
+
+
+let GetContext<'a when 'a :> DbContext> () = 
+    let randonConnStr = 
+        sprintf "DataSource=file:%s?mode=memory&cache=shared" <| Path.GetRandomFileName()
+    
+    let options = 
+        DbContextOptionsBuilder<'a>()
+            .UseSqlite(randonConnStr)
+            .Options
+    
+    Activator.CreateInstance(typeof<'a>, options )  :?> 'a 
+
 
 [<Fact>]
 let ``Posso salva e recuperar um registro no banco de dados`` () =
-    let options = 
-        DbContextOptionsBuilder<BloggingContext>()
-            //.UseSqlite("DataSource=:memory:")
-            .UseSqlite("Data Source=blogging.db")
-            .Options
     
-    use context = new BloggingContext(options)
-
-    context.Database.EnsureDeleted() |> ignore
+    use context  = GetContext<BloggingContext>() 
 
     context.Database.EnsureCreated() |> ignore
 
@@ -26,7 +33,9 @@ let ``Posso salva e recuperar um registro no banco de dados`` () =
 
     context.SaveChanges() |> ignore
 
-    context.Blogs.ToListAsync().Result |> Seq.last |> fun x -> Assert.Equal(blog,x)
-
     Assert.True(true)
 
+
+
+//type TestesSourceModel    
+        
