@@ -36,10 +36,7 @@ type Destination = {
     Numero:int 
 }
 
-
 type EntradaPosicao = Source of Source| Destination of Destination | Sinal of Sinal     //não precisa repositório
-
-
 
 type PosicaoAssociacao = {
     Posicao: Posicao
@@ -56,9 +53,7 @@ type AssociacaoPatch = {
     Ativo: bool
 }
 
-
 type SinalPlatinum = Source of Source | Destination of Destination         //não precisa repositório
-
 
 //historico
 // usuário pode adicionar
