@@ -55,7 +55,7 @@ module RepositoriosJsonGenericos =
 
     let getStream<'a>() =
         let path = obterCaminho<'a>()
-        File.Open(path, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.Read)
+        File.Open(path, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite)
 
     let ObterTodasEnteidadesDoJson<'a when 'a: equality> () =
         use stream = getStream<'a>()
@@ -67,7 +67,8 @@ module RepositoriosJsonGenericos =
         let actual = ObterTodasEnteidadesDoJson<'a>()
         let path = obterCaminho<'a>()
 
-        if List.contains entidade actual then raise <| Exception("Entidade já existe")
+        if List.contains entidade actual then 
+            raise <| Exception("Entidade já existe")
 
         let result = entidade :: actual
         let json = Newtonsoft.Json.JsonConvert.SerializeObject(result)

@@ -1,0 +1,43 @@
+@model Dominio.Sinal
+
+@{
+    ViewData["Title"] = "Add Sinal";
+}
+
+<h1>Add Sinal</h1>
+
+<!-- Formulário para adicionar sinal usando bootstrap -->
+<form asp-controller="Sinais" asp-action="Create" method="post">
+    <div class="form-group">
+        <label asp-for="Nome">Nome:</label>
+        <input asp-for="Nome" class="form-control" required>
+    </div>
+    <div class="form-group">
+        <label asp-for="Descricao">Descricao:</label>
+        <input asp-for="Descricao" class="form-control" required>
+    </div>
+    <div class="form-group">
+        <label asp-for="Fonte">Fonte:</label>
+        <input asp-for="Fonte" class="form-control" required>
+    </div>
+    <!--<a asp-controller="Sinais" asp-action="Index">Adicionar Sinal</a>-->
+    <button type="submit" class="btn btn-primary">Adicionar Sinal</button>
+</form>
+
+
+<!--<form asp-controller="Sinais" asp-action="Create" method="post">
+    <div>
+        <label asp-for="Nome">Nome:</label>
+        <input asp-for="Nome" required>
+    </div>
+    <div>
+        <label asp-for="Descricao">Descricao:</label>
+        <input asp-for="Descricao" required>
+    </div>
+    <div>
+        <label asp-for="Fonte">Fonte:</label>
+        <input asp-for="Fonte" required>
+    </div>
+    <button type="submit">Adicionar Sinal</button>
+</form>-->
+

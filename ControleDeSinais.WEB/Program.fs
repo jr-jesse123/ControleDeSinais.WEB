@@ -1,5 +1,9 @@
 namespace ControleDeSinais.WEB
 
+open Interfaces
+open Dominio
+open InfraEstrutura.Persistencia
+
 #nowarn "20"
 
 open System
@@ -30,6 +34,9 @@ module Program =
 
         builder.Services.AddRazorPages()
 
+        builder.Services.AddSingleton<ObterTodos<Sinal>>(Repositorios.ObterSinais)
+        builder.Services.AddSingleton<Adicionar<Sinal>>(Repositorios.AdicionarSinal)
+
         let app = builder.Build()
 
         if not (builder.Environment.IsDevelopment()) then
@@ -40,7 +47,7 @@ module Program =
 
         app.UseStaticFiles()
         app.UseRouting()
-        app.UseAuthorization()
+        //app.UseAuthorization()
 
         app.MapControllerRoute(name = "default", pattern = "{controller=Home}/{action=Index}/{id?}")
 
