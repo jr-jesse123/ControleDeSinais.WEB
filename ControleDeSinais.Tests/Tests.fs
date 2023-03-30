@@ -1,68 +1,77 @@
-module TestesDeInfraEstrutura
-
+namespace Testes.InfraEstrutura
 open System
 open Xunit
-open InfraEstrutura.Entities
 open InfraEstrutura.Persistencia
-open Microsoft.EntityFrameworkCore
 open System.IO
-
-
-
-let GetContext<'a when 'a :> DbContext> () = 
-    let randonConnStr = 
-        sprintf "DataSource=file:%s?mode=memory&cache=shared" <| Path.GetRandomFileName()
-        //sprintf "DataSource=file:%s.db" <| Path.GetRandomFileName() 
-        
-    let options = 
-        DbContextOptionsBuilder<'a>()
-            .UseSqlite(randonConnStr)
-            .Options
-    
-    let context = Activator.CreateInstance(typeof<'a>, options )  :?> 'a 
-    
-    context.Database.EnsureCreated() |> ignore
-    //context.Database.Migrate() |> ignore
-    context
-
-
-[<Fact>]
-let ``Posso salva e recuperar um registro no banco de dados`` () =
-    
-    use context  = GetContext<BloggingContext>() 
-
-    let blog = { Id = 0 ; Url = "http://sample.com" }
-
-    context.Blogs.Add(blog) |> ignore
-
-    context.SaveChanges() |> ignore
-
-    Assert.True(true)
-
-open InfraEstrutura.Persistencia.Models
 open Swensen.Unquote
+
+
+module Listas =
+
+    [<Theory>]
+    [<InlineData(1,"A")>]
+    [<InlineData(26,"Z")>]
+    [<InlineData(27,"AA")>]
+    let ``Números são corretamente mapeados para Letras`` nr resultadoEsperado =
+        let result = ListasFixas.transformarNrmEmLetra nr     
+        test <@ result = resultadoEsperado @>
+    
+
 open Dominio
-open Microsoft.AspNetCore.Connections
+open RepositoriosJsonGenericos
+
+module RepositoriosJson  =
+
+    let DeleteJsonTestFile<'a> () =
+        let path = obterCaminho<'a>()
+        if File.Exists(path) then
+            File.Delete(path)
+
+    [<Fact>]
+    let ``Tentar ler de um arquivo Vazio Retorna uma lista vazia`` () =
+        DeleteJsonTestFile<PosicaoAssociacao>()
+        let result = ObterTodasEnteidadesDoJson<PosicaoAssociacao>()
+
+        test <@ result = [] @>
 
 
-let TesteDeAdicaoERecuperacao<'a when 'a: not struct and 'a:equality> a = 
-    use context  = GetContext<ContextoDb>() 
-    
-    context.Set<'a>().Add(a) |> ignore
-    context.SaveChanges() |> ignore
-    
-    let conStr = context.Database.GetConnectionString()
-    let newContext = new ContextoDb(DbContextOptionsBuilder().UseSqlite(conStr).Options )
-    
-    let found = newContext.Set<'a>().ToListAsync().Result |> Seq.last
-    test <@ found = a @>
+    [<Fact>]
+    let ``É Possível Adicionar ítems e recuperalos`` () =
+        DeleteJsonTestFile<Posicao>()
+        let posicao = Posicao.create 1 1 "A"
+        
+        AdicionarEntidadeAoJson<Posicao> posicao
+
+        let result = ObterTodasEnteidadesDoJson<Posicao>()
+
+        test <@ result = [posicao] @>
 
 
-[<Theory>]
-[<InlineData(1,"A")>]
-[<InlineData(26,"Z")>]
-[<InlineData(27,"AA")>]
-let teste nr resultadoEsperado =
-    let result = ListasFixas.transformarNrmEmLetra nr     
-    test <@ result = resultadoEsperado @>
+    [<Fact>]
+    let ``É Possível Adicionar multiplos ítems e recuperalos`` () =
+        DeleteJsonTestFile<Posicao>()
+        let posicao = Posicao.create 1 1 "A"
+
+        let posicao2 = Posicao.create 1 1 "B"
+            
+        AdicionarEntidadeAoJson<Posicao> posicao
+
+        AdicionarEntidadeAoJson<Posicao> posicao2
     
+        let result = ObterTodasEnteidadesDoJson<Posicao>()
+    
+        test <@ result = [posicao2; posicao ] @>
+
+
+    [<Fact>]
+    let ``Não É Possível Adicionar dois registros iguais ao repositório`` () =
+        DeleteJsonTestFile<Posicao>()
+        let posicao = Posicao.create 1 1 "A"
+
+        let posicao2 = Posicao.create 1 1 "A"
+            
+        AdicionarEntidadeAoJson<Posicao> posicao
+
+        let action () = AdicionarEntidadeAoJson<Posicao> posicao2
+    
+        Assert.Throws<Exception>(action)
