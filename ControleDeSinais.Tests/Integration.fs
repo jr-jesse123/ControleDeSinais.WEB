@@ -14,7 +14,7 @@ type ControleDeSinaisWebFactory() =
 
 //TODO: LIDAR CORRETAEMNTE COM MÉTODOS ASSINCRONOS NA APLICAÇÃO
 [<Fact>]
-let teste1() =
+let ``É possíve listar sinais``() =
     let factory = new ControleDeSinaisWebFactory()
     let client = factory.CreateClient()
     
@@ -32,10 +32,10 @@ let ``É possível Criar um sinal``() =
     task {
 
         //let Keyvaluep (key, value) = new KeyValuePair<string, string>(key, value)
-        let formContent = 
+        use formContent = 
             [("Nome", "Sinal 1"); ("Descricao", "Sinal 1"); ("Fonte", "Sinal 1")]
             |> List.map KeyValuePair
-            |> FormUrlEncodedContent
+            |> fun x -> new FormUrlEncodedContent(x)     //TODO: PENSAR EM COMO FAZER ISSO DE FORMA EM RELAÇÃO AO DISPOSAL, TALVEZ CRIAR FUNÇÃO PARA NEW (let newup)
         
         
         let! response = client.PostAsync("/Sinais/Create", formContent)
@@ -54,7 +54,7 @@ let ``É possível chegar à página que cria um sinal``() =
         Assert.Equal(HttpStatusCode.OK, response.StatusCode)
     }
 
-
+//TODO: GENERALIZAR O TESTE DE ACESSO POR TIPO
 
     //Task.WaitAll(response)
         

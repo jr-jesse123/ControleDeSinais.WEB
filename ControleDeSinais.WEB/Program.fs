@@ -37,8 +37,18 @@ module Program =
 
         builder.Services.AddRazorPages()
 
+        //TODO: CONFERIR LIFETIME DOS REPOSITÓRIOS
+        //TODO: pensar em como registrar todos de uma vez
+        //builder.Services.AddTransient(typeof<ObterTodos<>>,fun _ -> Adicionar )
+
         builder.Services.AddSingleton<ObterTodos<Sinal>>(Repositorios.ObterSinais)
         builder.Services.AddSingleton<Adicionar<Sinal>>(Repositorios.AdicionarSinal)
+
+        builder.Services.AddSingleton<ObterTodos<Posicao>>(ListasFixas.ObterPosices)
+
+        builder.Services.AddSingleton<ObterTodos<Destination>>(ListasFixas.ObterDestinations)
+
+
 
         let app = builder.Build()
 

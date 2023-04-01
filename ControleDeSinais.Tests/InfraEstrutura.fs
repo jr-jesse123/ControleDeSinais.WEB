@@ -29,8 +29,8 @@ module RepositoriosJson  =
 
     [<Fact>]
     let ``Tentar ler de um arquivo Vazio Retorna uma lista vazia`` () =
-        DeleteJsonTestFile<PosicaoAssociacao>()
-        let result = ObterTodasEnteidadesDoJson<PosicaoAssociacao>()
+        DeleteJsonTestFile<AssociacaoPosicao>()
+        let result = ObterTodasEnteidadesDoJson<AssociacaoPosicao>()
 
         test <@ result = [] @>
 

@@ -1,4 +1,5 @@
-﻿namespace Dominio
+﻿
+namespace Dominio
 
 open System
 
@@ -22,8 +23,7 @@ type Sinal = {
     Descricao: string
     Fonte: string
 }
-with
-    static member empty() = { Nome = ""; Descricao = ""; Fonte = ""}
+
 
 
 //256 lista permanente
@@ -40,15 +40,16 @@ type Destination = {
 
 type EntradaPosicao = Source of Source| Destination of Destination | Sinal of Sinal     //não precisa repositório
 
-type PosicaoAssociacao = {
+[<CLIMutable>]
+type AssociacaoPosicao = {
     Posicao: Posicao
-    EntradaPosicao: EntradaPosicao
+    EntradaPosicao: EntradaPosicao 
     DataDeCriacao: DateTime
 }
 
 type AssociacaoPatch = {
-    Entrada: PosicaoAssociacao
-    Saida: PosicaoAssociacao
+    Entrada: AssociacaoPosicao
+    Saida: AssociacaoPosicao
     DataDeCriacao: DateOnly
     PrevisaoDeRemocao: DateOnly
     Descricao: string
@@ -75,7 +76,6 @@ namespace Interfaces
 type ObterTodos<'a> = ObterTodos of (unit -> 'a list)
 
 type Adicionar<'a> = Adicionar of ('a -> unit)
-
 
 
 //casos de uso

@@ -82,18 +82,20 @@ open RepositoriosJsonGenericos
 
 
 module Repositorios = 
+    
     let AdicionarSinal = Adicionar AdicionarEntidadeAoJson<Sinal>
     let ObterSinais = ObterTodos ObterTodasEnteidadesDoJson<Sinal>
 
     let AdicionarEntradaPosicao = Adicionar AdicionarEntidadeAoJson<EntradaPosicao>
     let ObterEntradasPosicao = ObterTodos ObterTodasEnteidadesDoJson<EntradaPosicao>
 
-    let AdicionarPosicaoAssociacao = Adicionar AdicionarEntidadeAoJson<PosicaoAssociacao>
-    let ObterPosicoseAssociacao = ObterTodos ObterTodasEnteidadesDoJson<PosicaoAssociacao>
+    let AdicionarPosicaoAssociacao = Adicionar AdicionarEntidadeAoJson<AssociacaoPosicao>
+    let ObterPosicoseAssociacao = ObterTodos ObterTodasEnteidadesDoJson<AssociacaoPosicao>
 
     let AdicionarAssociacaoPatch = Adicionar AdicionarEntidadeAoJson<AssociacaoPatch>
     let ObterAssociacaoPatch = ObterTodos ObterTodasEnteidadesDoJson<AssociacaoPatch>
 
     let AdicionarAssociacaoPlatinum = Adicionar AdicionarEntidadeAoJson<AssociacaoPlatinum>
     let ObterAssociacaoPlatinum = ObterTodos ObterTodasEnteidadesDoJson<AssociacaoPlatinum>
+
 

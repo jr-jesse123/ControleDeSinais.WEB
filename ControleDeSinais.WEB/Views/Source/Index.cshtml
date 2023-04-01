@@ -1,0 +1,24 @@
+﻿@model IEnumerable<Dominio.Source>
+
+    @{
+    ViewData["Title"] = "Sources";
+    }
+
+    <h1>Sources</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Número</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var dest in Model)
+            {
+            <tr>
+                <td>@dest.Numero</td>
+            </tr>
+            }
+        </tbody>
+    </table>
+

@@ -9,6 +9,7 @@ open ControleDeSinais.WEB.Models
 open Interfaces
 open Dominio
 open System.Security.Cryptography
+open Newtonsoft.Json.Linq
 
 
 type HomeController (logger : ILogger<HomeController>) =
@@ -42,7 +43,6 @@ type ControllerLeituraBase<'a>(repositorioLeitura : ObterTodos<'a>) =
 
 type ControleLeituraGravaCaoBase<'a when 'a:(new:unit -> 'a)>(repositorioLeitura : ObterTodos<'a>, repositorioGravacao: Adicionar<'a>) =
     inherit ControllerLeituraBase<'a>(repositorioLeitura)
-    let (Adicionar adicionar) =  repositorioGravacao
     
     [<HttpGet>]
     member inline this.Create() : IActionResult =
@@ -50,16 +50,35 @@ type ControleLeituraGravaCaoBase<'a when 'a:(new:unit -> 'a)>(repositorioLeitura
         this.View(newRecord)
     
 
+
+type PosicoesController (repositorioLeitura) =  
+    inherit ControllerLeituraBase<Posicao>(repositorioLeitura ) 
+
+type DestinationsController (repositorioLeitura) =  
+    inherit ControllerLeituraBase<Destination>(repositorioLeitura ) 
+        
+type SourcesController (repositorioLeitura) =  
+    inherit ControllerLeituraBase<Destination>(repositorioLeitura ) 
+
+
 type SinaisController (repositorioLeitura , repositorioGravacao) =  
     inherit ControleLeituraGravaCaoBase<Sinal>(repositorioLeitura , repositorioGravacao) 
     let (Adicionar adicionar) =  repositorioGravacao
     [<HttpPost>]
     member this.Create(nome: string, descricao: string, fonte: string) =
-        let newSinal = {Nome=nome;Descricao = descricao;Fonte=fonte}
-        adicionar newSinal
+        let novoSinal = {Nome=nome;Descricao = descricao;Fonte=fonte}
+        adicionar novoSinal
         this.RedirectToAction "Index"
 
 
 
-    
-    
+
+type AssociacoesController (repositorioLeitura , repositorioGravacao) =  
+    inherit ControleLeituraGravaCaoBase<AssociacaoPosicao>(repositorioLeitura , repositorioGravacao) 
+    //let (Adicionar adicionar) =  repositorioGravacao
+    //[<HttpPost>]
+    //member this.Create(nome: string, descricao: string, fonte: string) =
+    //    let novoSinal = {Nome=nome;Descricao = descricao;Fonte=fonte}
+    //    adicionar novoSinal
+    //    this.RedirectToAction "Index"
+        

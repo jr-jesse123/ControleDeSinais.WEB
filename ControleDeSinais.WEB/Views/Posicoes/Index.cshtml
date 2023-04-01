@@ -1,0 +1,28 @@
+﻿@model IEnumerable<Dominio.Posicao>
+
+    @{
+    ViewData["Title"] = "Posicoes";
+    }
+
+    <h1>Posicoes</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Rack</th>
+                <th>Descricao</th>
+                <th>Linha</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var pos in Model)
+            {
+            <tr>
+                <td>@pos.NrRack</td>
+                <td>@pos.Coluna</td>
+                <td>@pos.Linha</td>
+            </tr>
+            }
+        </tbody>
+    </table>
+    
