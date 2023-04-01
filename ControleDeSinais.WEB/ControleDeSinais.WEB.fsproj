@@ -25,4 +25,12 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Views\Destination\" />
+    <Folder Include="Views\AssociacaoPatch\" />
+    <Folder Include="Views\AssociacaoPlatinum\" />
+    <Folder Include="Views\PosicaoAssociacao\" />
+    <Folder Include="Views\Source\" />
+  </ItemGroup>
+
 </Project>

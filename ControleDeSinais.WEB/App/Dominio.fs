@@ -22,6 +22,8 @@ type Sinal = {
     Descricao: string
     Fonte: string
 }
+with
+    static member empty() = { Nome = ""; Descricao = ""; Fonte = ""}
 
 
 //256 lista permanente
