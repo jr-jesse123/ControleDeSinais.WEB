@@ -1,4 +1,4 @@
-@model ( ControleDeSinais.WEB.Controllers.AssociaCaoPosicaoModel,IEnumerable<Dominio.Sinal>)
+@model ControleDeSinais.WEB.Controllers.AssociaCaoPosicaoModel
 @using Dominio;
 @using Interfaces
 @inject  ObterTodos<Dominio.Sinal> listaSinais
@@ -20,8 +20,8 @@
         </div>-->
 
         <div>
-            <label for="Item1.IndicePosicao">Choose an option:</label>
-            <select id="Item1.IndicePosicao" name="SelectedOption" asp-for="Item1.IndicePosicao">
+            <label for="IndicePosicao">Choose an option:</label>
+            <select id="IndicePosicao" name="SelectedOption" asp-for="IndicePosicao">
                 @for (int i = 0; i < x.Count(); i++)
                 {
                     <option value=@i>@Html.Partial("_SinalPartial",x[i])</option>

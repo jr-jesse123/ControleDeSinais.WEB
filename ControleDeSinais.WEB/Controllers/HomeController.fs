@@ -101,9 +101,7 @@ type AssociacaoPosicaoController (repositorioLeitura , repositorioGravacao, list
     
     override this.Create() : IActionResult =
         let newRecord  =  AssociaCaoPosicaoModel()
-
-        let model = ValueTuple.Create (newRecord,sinais |> Seq.ofList)
-        this.View(model)
+        this.View(newRecord)
     
     
     //[<HttpPost>]
