@@ -1,0 +1,45 @@
+﻿@model IEnumerable<Dominio.AssociacaoPosicao>
+
+    @{
+    ViewData["Title"] = "Associação de posições";
+    }
+
+    <h1>Associação de posições</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Posicao</th>
+                <th>EntradaPosicao</th>
+                <th>Detalhes</th>
+            </tr>
+        </thead>
+        <tbody>
+            @* @foreach (var ass in Model)
+            { *@
+            <tr>
+                <td>Rack: 1 , Coluna : 1, Linha: 2</td>
+                <td>Source</td>
+                <td>Número 1</td>
+            </tr>
+            <tr>
+                <td>Rack: 1 , Coluna : 1, Linha: 2</td>
+                <td>Destination</td>
+                <td>Número 2</td>
+            </tr>
+                        <tr>
+                <td>Rack: 1 , Coluna : 1, Linha: 2</td>
+                <td>Sinal</td>
+                <td>
+                
+                        @Html.Partial("_SinalPartial", new Dominio.Sinal() {Nome = "nome sinal", Descricao = "esse é um sinal da hora", Fonte = "lá do psul"})
+                </td>
+                
+            </tr>
+            
+        </tbody>
+    </table>
+    <a asp-action="Create" class="btn btn-primary">Adicionar Associacao</a>
+
+
+

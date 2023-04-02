@@ -50,7 +50,7 @@ type AssociacaoPosicao = {
 type AssociacaoPatch = {
     Entrada: AssociacaoPosicao
     Saida: AssociacaoPosicao
-    DataDeCriacao: DateOnly
+    DataDeCriacao: DateTime
     PrevisaoDeRemocao: DateOnly
     Descricao: string
     Ativo: bool
@@ -70,10 +70,13 @@ module AssociacaoPlatinum =
     let create sinalPlatinum sinal dataDeCriacao = 
         {SinalPlatinum = sinalPlatinum; Sinal = sinal; DataDeCriacao = dataDeCriacao}
 
-
+//TODO: COLOCAR INTERFACES DENTRO DE DOMÍNIO.INTERFACES
 namespace Interfaces
 
 type ObterTodos<'a> = ObterTodos of (unit -> 'a list)
+    with member this.Items() = 
+        let (ObterTodos f) = this
+        f()
 
 type Adicionar<'a> = Adicionar of ('a -> unit)
 

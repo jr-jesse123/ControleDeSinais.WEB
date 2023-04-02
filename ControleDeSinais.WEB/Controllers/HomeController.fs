@@ -10,6 +10,7 @@ open Interfaces
 open Dominio
 open System.Security.Cryptography
 open Newtonsoft.Json.Linq
+open System
 
 
 type HomeController (logger : ILogger<HomeController>) =
@@ -45,7 +46,8 @@ type ControleLeituraGravaCaoBase<'a when 'a:(new:unit -> 'a)>(repositorioLeitura
     inherit ControllerLeituraBase<'a>(repositorioLeitura)
     
     [<HttpGet>]
-    member inline this.Create() : IActionResult =
+    abstract member Create : unit -> IActionResult 
+    default this.Create() : IActionResult =
         let newRecord = new 'a()
         this.View(newRecord)
     
@@ -70,12 +72,40 @@ type SinaisController (repositorioLeitura , repositorioGravacao) =
         adicionar novoSinal
         this.RedirectToAction "Index"
 
+type EntradaPosicaoModel = 
+    Source of int | Destination of int | Sinal of int
+    with member this.Indice = 
+            match this with
+            | Source x -> x
+            | Destination x -> x
+            | Sinal x -> x
+
+//TODO: PENSAR EM INTERNACIONALIZAÇÃO DA DATA
+type AssociaCaoPosicaoModel () = 
+    [<DefaultValue>] val mutable IndicePosicao : int
+    [<DefaultValue>] val mutable DataDeCriacao: DateTime
+    [<DefaultValue>] val mutable EntradaPosicao: EntradaPosicaoModel
+
+    
+    
 
 
 
-type AssociacoesController (repositorioLeitura , repositorioGravacao) =  
+//TODO: CHECAR COMO USAR CONSTRUTORES SECUNDÁRIOS PARA DESCONSTRUIR OS SINGLE CASES UNIONS
+type AssociacaoPosicaoController (repositorioLeitura , repositorioGravacao, listaSinais : ObterTodos<Sinal>) =  
     inherit ControleLeituraGravaCaoBase<AssociacaoPosicao>(repositorioLeitura , repositorioGravacao) 
-    //let (Adicionar adicionar) =  repositorioGravacao
+    let (Adicionar adicionar) =  repositorioGravacao
+    let sinais =  
+        let (ObterTodos obter ) = listaSinais
+        obter()
+    
+    override this.Create() : IActionResult =
+        let newRecord  =  AssociaCaoPosicaoModel()
+
+        let model = ValueTuple.Create (newRecord,sinais |> Seq.ofList)
+        this.View(model)
+    
+    
     //[<HttpPost>]
     //member this.Create(nome: string, descricao: string, fonte: string) =
     //    let novoSinal = {Nome=nome;Descricao = descricao;Fonte=fonte}

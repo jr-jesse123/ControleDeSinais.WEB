@@ -30,6 +30,8 @@ module Program =
     let main args =
         let builder = WebApplication.CreateBuilder(args)
 
+        //TODO: CRIAR HOT HELOADER PARA O BROWSER (REFRESH ON CSHTML FILE SAVED)
+
         builder
             .Services
             .AddControllersWithViews()
@@ -43,9 +45,14 @@ module Program =
 
         builder.Services.AddSingleton<ObterTodos<Sinal>>(Repositorios.ObterSinais)
         builder.Services.AddSingleton<Adicionar<Sinal>>(Repositorios.AdicionarSinal)
+        
+        builder.Services.AddSingleton<ObterTodos<AssociacaoPosicao>>(Repositorios.ObterAssociacaoPosicose)
+        builder.Services.AddSingleton<Adicionar<AssociacaoPosicao>>(Repositorios.AdicionarAssociacaoPosicao)
 
+        
+        
+        
         builder.Services.AddSingleton<ObterTodos<Posicao>>(ListasFixas.ObterPosices)
-
         builder.Services.AddSingleton<ObterTodos<Destination>>(ListasFixas.ObterDestinations)
 
 
@@ -64,6 +71,8 @@ module Program =
 
         app.MapControllerRoute(name = "default", pattern = "{controller=Home}/{action=Index}/{id?}")
 
+
+        //TODO: TEST APP VIEW WITH RAZOR PAGES
         app.MapRazorPages()
 
         app.Run()

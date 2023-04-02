@@ -60,7 +60,7 @@ module RepositoriosJson  =
     
         let result = ObterTodasEnteidadesDoJson<Posicao>()
     
-        test <@ result = [posicao2; posicao ] @>
+        test <@ result = [posicao ; posicao2 ] @>
 
 
     [<Fact>]
@@ -75,3 +75,17 @@ module RepositoriosJson  =
         let action () = AdicionarEntidadeAoJson<Posicao> posicao2
     
         Assert.Throws<Exception>(action)
+
+
+    [<Fact>]
+    let ``Adição de novos ítens não alera a posição dos ítens anteriores`` () =
+        DeleteJsonTestFile<Posicao>()
+        let posicao = Posicao.create 1 1 "A"
+        let posicao2 = Posicao.create 1 1 "B"
+            
+        AdicionarEntidadeAoJson<Posicao> posicao
+        AdicionarEntidadeAoJson<Posicao> posicao2
+    
+        let result = ObterTodasEnteidadesDoJson<Posicao>()
+    
+        test <@ result[0] = posicao ; result[1] = posicao2  @>

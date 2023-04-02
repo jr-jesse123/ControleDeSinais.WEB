@@ -10,6 +10,8 @@
 	<Compile Include="App\Dominio.fs" />
 	<Compile Include="App\InfraEstrutura.fs" />
 	<Compile Include="Migrations/*.fs" />
+	<Content Remove="views\shared\_SinalPartial.cshtml" />
+	<_ContentIncludedByDefault Remove="views\shared\_SinalPartial.cshtml" />
     <Compile Include="Models/ErrorViewModel.fs" />
     <Compile Include="Controllers/HomeController.fs" />
     <Compile Include="Program.fs" />
@@ -17,6 +19,7 @@
 
   <ItemGroup>
     <None Include="Dockerfile" />
+    <None Include="views\shared\_SinalPartial.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -28,7 +31,6 @@
   <ItemGroup>
     <Folder Include="Views\AssociacaoPatch\" />
     <Folder Include="Views\AssociacaoPlatinum\" />
-    <Folder Include="Views\PosicaoAssociacao\" />
   </ItemGroup>
 
 </Project>

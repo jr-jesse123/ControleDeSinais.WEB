@@ -70,7 +70,7 @@ module RepositoriosJsonGenericos =
         if List.contains entidade actual then 
             raise <| Exception("Entidade já existe")
 
-        let result = entidade :: actual
+        let result = List.append actual [entidade]
         let json = Newtonsoft.Json.JsonConvert.SerializeObject(result)
         use stream = getStream<'a>()
         use writter = StreamWriter(stream)
@@ -89,8 +89,8 @@ module Repositorios =
     let AdicionarEntradaPosicao = Adicionar AdicionarEntidadeAoJson<EntradaPosicao>
     let ObterEntradasPosicao = ObterTodos ObterTodasEnteidadesDoJson<EntradaPosicao>
 
-    let AdicionarPosicaoAssociacao = Adicionar AdicionarEntidadeAoJson<AssociacaoPosicao>
-    let ObterPosicoseAssociacao = ObterTodos ObterTodasEnteidadesDoJson<AssociacaoPosicao>
+    let AdicionarAssociacaoPosicao = Adicionar AdicionarEntidadeAoJson<AssociacaoPosicao>
+    let ObterAssociacaoPosicose = ObterTodos ObterTodasEnteidadesDoJson<AssociacaoPosicao>
 
     let AdicionarAssociacaoPatch = Adicionar AdicionarEntidadeAoJson<AssociacaoPatch>
     let ObterAssociacaoPatch = ObterTodos ObterTodasEnteidadesDoJson<AssociacaoPatch>

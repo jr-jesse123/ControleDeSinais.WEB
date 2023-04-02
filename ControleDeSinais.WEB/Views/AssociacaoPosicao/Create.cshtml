@@ -1,0 +1,36 @@
+@model ( ControleDeSinais.WEB.Controllers.AssociaCaoPosicaoModel,IEnumerable<Dominio.Sinal>)
+@using Dominio;
+@using Interfaces
+@inject  ObterTodos<Dominio.Sinal> listaSinais
+
+    @{
+    ViewData["Title"] = "Add Sinal";
+    var x = listaSinais.Items();
+
+    }
+
+    <h1>Add Sinal</h1>
+
+    <!-- Formul�rio para adicionar sinal usando bootstrap -->
+    <form asp-controller="Sinais" asp-action="Create" method="post">
+
+        <!--<div class="form-group">
+            <label asp-for="Item1.Nome">Nome:</label>
+            <input asp-for="Nome" class="form-control" required>
+        </div>-->
+
+        <div>
+            <label for="Item1.IndicePosicao">Choose an option:</label>
+            <select id="Item1.IndicePosicao" name="SelectedOption" asp-for="Item1.IndicePosicao">
+                @for (int i = 0; i < x.Count(); i++)
+                {
+                    <option value=@i>@Html.Partial("_SinalPartial",x[i])</option>
+
+                }
+            </select>
+        </div>
+
+        <!--<a asp-controller="Sinais" asp-action="Index">Adicionar Sinal</a>-->
+        <button type="submit" class="btn btn-primary">Adicionar Sinal</button>
+    </form>
+
