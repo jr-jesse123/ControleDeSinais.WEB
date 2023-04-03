@@ -7,7 +7,6 @@
 @inject  ObterTodos<Dominio.Source> listaSources
 @inject  ObterTodos<Dominio.Posicao> listaPosicoes
 
-
     @{
     ViewData["Title"] = "Associação de posição";
     var sinais = listaSinais.Items();
@@ -26,77 +25,9 @@
     <!-- Formul�rio para adicionar sinal usando bootstrap -->
     <form asp-controller="AssociacaoPosicao" asp-action="Create" method="post">
 
-        <!--<div class="form-group">
-        <label asp-for="Item1.Nome">Nome:</label>
-        <input asp-for="Nome" class="form-control" required>
-    </div>-->
-
-
         <div class="card">
             <div class="card-body">
-
-
-                <div id="AssociacaoPicker">
-
-                    <!-- TODO: EMPACOTAR ESTE SELECT COM VALOR 0 DE ESCOLHA -->
-                    <div class="form-select">
-                        <label>Qual o tipo de Associação?</label>
-                        <select id="associationType">
-                            <option value="0" selected>Escolha</option>
-                            <option value="source">source</option>
-                            <option value="destination">destination</option>
-                            <option value="sinal">sinal</option>
-                        </select>
-                    </div>
-
-                    <div class="form-select">
-
-                        <label>Escolha um Destination:</label>
-                        <select>
-                            <option value="-1">Escolha</option>
-                            @for (int i = 0; i < destinations.Count(); i++)
-                            {
-                            <option value=@i>@destinations[i]</option>
-
-                            }
-                        </select>
-                    </div>
-
-                    <div class="form-select">
-                        <label>Eescolha um source</label>
-                        <select id="sourceSelect">
-                            <option value=0>Escolha</option>
-                            @for (int i = 0; i < sources.Count(); i++)
-                            {
-                            <option value=@i>@sources[i]</option>
-
-                            }
-                        </select>
-                    </div>
-
-                    <div class="form-select">
-
-                        <label for="IndicePosicao">Escolha um  sinal:</label>
-                        <select id="IndicePosicao" name="SelectedOption" asp-for="IndicePosicao">
-                            <option value=0>Escolha</option>
-                            @for (int i = 0; i < sinais.Count(); i++)
-                            {
-                            <option value=@i>@Html.Partial("_SinalPartial",sinais[i])</option>
-
-                            }
-                        </select>
-                    </div>
-
-                </div>
-
-            </div>
-        </div>
-
-
-        <div class="card">
-            <div class="card-body">
-
-                <!--<a asp-controller="Sinais" asp-action="Index">Adicionar Sinal</a>-->
+                <h5 class="card-title">Posição</h5>
                 <!-- TODO: transformar estes componentes em partial views -->
                 <!-- TODO: ANALISAR SE COM VIEW COMPONENT EU PODERIA TRAZIR ESTA ESCOLHA PARA UM POSITION ID E UTILIZAR AS VIEWS NORMALEMNTE -->
                 <div id="PositionPicker">
@@ -131,7 +62,96 @@
 
                 </div>
             </div>
-            </div>
-                <button type="submit" class="btn btn-primary">Adicionar Sinal</button>
-    </form>
+        </div>
 
+
+
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Entrada</h5>
+
+                <div id="AssociacaoPicker">
+
+                    <!-- TODO: EMPACOTAR ESTE SELECT COM VALOR 0 DE ESCOLHA -->
+                    <div class="form-select">
+                        <label>Qual o tipo de Associação?</label>
+                        <select id="associationTypeSelect">
+                            <option value="0" selected>Escolha</option>
+                            <option value="source">source</option>
+                            <option value="destination">destination</option>
+                            <option value="sinal">sinal</option>
+                        </select>
+                    </div>
+
+                    <div id="destinationPicker" class="form-select d-none">
+                        <label>Escolha um Destination:</label>
+                        <select>
+                            <option value="-1">Escolha</option>
+                            @for (int i = 0; i < destinations.Count(); i++)
+                            {
+                            <option value=@i>@destinations[i]</option>
+
+                            }
+                        </select>
+                    </div>
+
+                    <div id="sourcePicker" class="form-select d-none">
+                        <label>Eescolha um source</label>
+                        <select id="sourceSelect">
+                            <option value=0>Escolha</option>
+                            @for (int i = 0; i < sources.Count(); i++)
+                            {
+                            <option value=@i>@sources[i]</option>
+
+                            }
+                        </select>
+                    </div>
+
+                    <div id="sinalPicker" class="form-select d-none">
+
+                        <label for="IndicePosicao">Escolha um  sinal:</label>
+                        <select id="IndicePosicao" name="SelectedOption">
+                            <option value=0>Escolha</option>
+                            @for (int i = 0; i < sinais.Count(); i++)
+                            {
+                                <option value=@i>@Html.Partial("_SinalPartial",sinais[i])</option>
+                            }
+                        </select>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Adicionar Sinal</button>
+    </form>
+    @section Scripts {
+    <script>
+        let tipoAssociacaoSelect = document.querySelector('#associationTypeSelect')
+
+        tipoAssociacaoSelect.onchange = v => MostrarSelectorSelectionado(v.target.value)
+
+        function EsconderElemento(seletor) {
+            document.querySelector('#' + seletor + 'Picker').classList.add('d-none')
+        }
+
+        function mostrarElemento(seletor) {
+            document.querySelector('#' + seletor + 'Picker').classList.remove('d-none')
+        }
+
+        let selectors = ['source', 'destination', 'sinal']  
+        function MostrarSelectorSelectionado(selector) {
+
+            if (selector === "0") {
+                selectors.forEach(s => EsconderElemento(s))
+                return
+            }
+
+            mostrarElemento(selector)
+
+            selectors.filter(s => s != selector).forEach(s => EsconderElemento(s))
+
+        }
+
+    </script>
+    }
