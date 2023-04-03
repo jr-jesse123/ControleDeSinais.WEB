@@ -41,7 +41,8 @@ type ControllerLeituraBase<'a>(repositorioLeitura : ObterTodos<'a>) =
         this.View(x)  
 
 
-
+//TODO: CRIAR SEGUNDO ARGUMENTO GENÉRICO PARA O MODEL UTILIZADO EM GRAVAÇÃO QUE PODE SER O MESMO DA LEITURA
+//CONTROLE<posicaoassociacao,posicaoAssociacaoMOdel>
 type ControleLeituraGravaCaoBase<'a when 'a:(new:unit -> 'a)>(repositorioLeitura : ObterTodos<'a>, repositorioGravacao: Adicionar<'a>) =
     inherit ControllerLeituraBase<'a>(repositorioLeitura)
     
@@ -72,19 +73,23 @@ type SinaisController (repositorioLeitura , repositorioGravacao) =
         adicionar novoSinal
         this.RedirectToAction "Index"
 
-type EntradaPosicaoModel = 
-    Source of int | Destination of int | Sinal of int
-    with member this.Indice = 
-            match this with
-            | Source x -> x
-            | Destination x -> x
-            | Sinal x -> x
+type TipoEntradaPosicao = 
+    | Source = 0
+    | Destination = 1
+    | Sinal = 2
+
+
+
+
 
 //TODO: PENSAR EM INTERNACIONALIZAÇÃO DA DATA
 type AssociaCaoPosicaoModel () = 
-    [<DefaultValue>] val mutable IndicePosicao : int
-    [<DefaultValue>] val mutable DataDeCriacao: DateTime
-    [<DefaultValue>] val mutable EntradaPosicao: EntradaPosicaoModel
+    [<DefaultValue>] val mutable NrRack : int
+    [<DefaultValue>] val mutable NrColuna : int
+    [<DefaultValue>] val mutable NrLinha : int
+    [<DefaultValue>] val mutable TipoEntrada : TipoEntradaPosicao
+    [<DefaultValue>] val mutable EntradaIndice : Nullable<int>
+
 
     
     

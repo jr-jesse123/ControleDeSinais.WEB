@@ -3,6 +3,8 @@ namespace ControleDeSinais.WEB
 open Interfaces
 open Dominio
 open InfraEstrutura.Persistencia
+open Microsoft.AspNetCore.SignalR
+open Microsoft.Extensions.Hosting
 
 #nowarn "20"
 
@@ -19,9 +21,11 @@ open Microsoft.Extensions.Configuration
 open Microsoft.Extensions.DependencyInjection
 open Microsoft.Extensions.Hosting
 open Microsoft.Extensions.Logging
-
+open Microsoft.AspNetCore.Http
 type Program() =
     class end
+
+
 
 module Program =
     let exitCode = 0
@@ -38,6 +42,7 @@ module Program =
             .AddRazorRuntimeCompilation()
 
         builder.Services.AddRazorPages()
+        builder.Services.AddSignalR()
 
         //TODO: CONFERIR LIFETIME DOS REPOSITÓRIOS
         //TODO: pensar em como registrar todos de uma vez
@@ -54,7 +59,11 @@ module Program =
         
         builder.Services.AddSingleton<ObterTodos<Posicao>>(ListasFixas.ObterPosices)
         builder.Services.AddSingleton<ObterTodos<Destination>>(ListasFixas.ObterDestinations)
+        builder.Services.AddSingleton<ObterTodos<Source>>(ListasFixas.ObterSources)
+        
 
+        
+        builder.Services.AddHostedService<Refresher.ViewWatherIHostedService>()
 
 
         let app = builder.Build()
@@ -74,6 +83,15 @@ module Program =
 
         //TODO: TEST APP VIEW WITH RAZOR PAGES
         app.MapRazorPages()
+
+        app.MapHub<RefreshHub>("/refreshHub")
+
+        app.MapGet("/refresh", Func<IHubContext<RefreshHub>,IResult>(fun (x : IHubContext<RefreshHub> ) -> 
+            x.Clients.All.SendAsync("refresh").Wait(); 
+            Results.Ok()
+        ))
+
+        //app.MapGet("/", Func<HttpContext,IResult>(fun (x : HttpContext) -> x.Response.Redirect("/Sinais/Index"); Results.Ok()))
 
         app.Run()
 

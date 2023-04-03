@@ -1,36 +1,137 @@
 @model ControleDeSinais.WEB.Controllers.AssociaCaoPosicaoModel
 @using Dominio;
+@using System.Linq;
 @using Interfaces
 @inject  ObterTodos<Dominio.Sinal> listaSinais
+@inject  ObterTodos<Dominio.Destination> listaDestinations
+@inject  ObterTodos<Dominio.Source> listaSources
+@inject  ObterTodos<Dominio.Posicao> listaPosicoes
+
 
     @{
-    ViewData["Title"] = "Add Sinal";
-    var x = listaSinais.Items();
-
+    ViewData["Title"] = "Associação de posição";
+    var sinais = listaSinais.Items();
+    var destinations = listaDestinations.Items();
+    var sources = listaSources.Items();
+    var posicoes = listaPosicoes.Items();
+    //TODO: descobrir como extrair todas as listas de uma vez.
+    //TODO: mover essa construção para um serviço
+    var racks = listaPosicoes.Items().Select(p => p.NrRack).Distinct();
+    var colunas = listaPosicoes.Items().Select(p => p.Coluna).Distinct();
+    var linhas = listaPosicoes.Items().Select(p => p.Linha).Distinct();
     }
 
-    <h1>Add Sinal</h1>
+    <h1>Adicionar Associação de posição </h1>
 
     <!-- Formul�rio para adicionar sinal usando bootstrap -->
-    <form asp-controller="Sinais" asp-action="Create" method="post">
+    <form asp-controller="AssociacaoPosicao" asp-action="Create" method="post">
 
         <!--<div class="form-group">
-            <label asp-for="Item1.Nome">Nome:</label>
-            <input asp-for="Nome" class="form-control" required>
-        </div>-->
+        <label asp-for="Item1.Nome">Nome:</label>
+        <input asp-for="Nome" class="form-control" required>
+    </div>-->
 
-        <div>
-            <label for="IndicePosicao">Choose an option:</label>
-            <select id="IndicePosicao" name="SelectedOption" asp-for="IndicePosicao">
-                @for (int i = 0; i < x.Count(); i++)
-                {
-                    <option value=@i>@Html.Partial("_SinalPartial",x[i])</option>
 
-                }
-            </select>
+        <div class="card">
+            <div class="card-body">
+
+
+                <div id="AssociacaoPicker">
+
+                    <!-- TODO: EMPACOTAR ESTE SELECT COM VALOR 0 DE ESCOLHA -->
+                    <div class="form-select">
+                        <label>Qual o tipo de Associação?</label>
+                        <select id="associationType">
+                            <option value="0" selected>Escolha</option>
+                            <option value="source">source</option>
+                            <option value="destination">destination</option>
+                            <option value="sinal">sinal</option>
+                        </select>
+                    </div>
+
+                    <div class="form-select">
+
+                        <label>Escolha um Destination:</label>
+                        <select>
+                            <option value="-1">Escolha</option>
+                            @for (int i = 0; i < destinations.Count(); i++)
+                            {
+                            <option value=@i>@destinations[i]</option>
+
+                            }
+                        </select>
+                    </div>
+
+                    <div class="form-select">
+                        <label>Eescolha um source</label>
+                        <select id="sourceSelect">
+                            <option value=0>Escolha</option>
+                            @for (int i = 0; i < sources.Count(); i++)
+                            {
+                            <option value=@i>@sources[i]</option>
+
+                            }
+                        </select>
+                    </div>
+
+                    <div class="form-select">
+
+                        <label for="IndicePosicao">Escolha um  sinal:</label>
+                        <select id="IndicePosicao" name="SelectedOption" asp-for="IndicePosicao">
+                            <option value=0>Escolha</option>
+                            @for (int i = 0; i < sinais.Count(); i++)
+                            {
+                            <option value=@i>@Html.Partial("_SinalPartial",sinais[i])</option>
+
+                            }
+                        </select>
+                    </div>
+
+                </div>
+
+            </div>
         </div>
 
-        <!--<a asp-controller="Sinais" asp-action="Index">Adicionar Sinal</a>-->
-        <button type="submit" class="btn btn-primary">Adicionar Sinal</button>
+
+        <div class="card">
+            <div class="card-body">
+
+                <!--<a asp-controller="Sinais" asp-action="Index">Adicionar Sinal</a>-->
+                <!-- TODO: transformar estes componentes em partial views -->
+                <!-- TODO: ANALISAR SE COM VIEW COMPONENT EU PODERIA TRAZIR ESTA ESCOLHA PARA UM POSITION ID E UTILIZAR AS VIEWS NORMALEMNTE -->
+                <div id="PositionPicker">
+
+                    <div class="form-select">
+                        <label>Rack:</label>
+                        <select id="nrRack">
+                            <option value=0>Escolha</option>
+                            @foreach(var nr in racks ){
+                            <option value="@nr">@nr </option>
+                            }
+                        </select>
+                    </div>
+                    <div class="form-select">
+                        <label>Coluna:</label>
+                        <select id="Coluna">
+                            <option value=0>Escolha</option>
+                            @foreach(var nr in colunas ){
+                            <option value="@nr">@nr </option>
+                            }
+                        </select>
+                    </div>
+                    <div class="form-select">
+                        <label>linha:</label>
+                        <select id="Linha">
+                            <option value=0>Escolha</option>
+                            @foreach(var nr in linhas ){
+                            <option value="@nr">@nr </option>
+                            }
+                        </select>
+                    </div>
+
+                </div>
+            </div>
+            </div>
+                <button type="submit" class="btn btn-primary">Adicionar Sinal</button>
     </form>
 

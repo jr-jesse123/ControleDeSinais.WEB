@@ -40,7 +40,7 @@ let ``É possíve listar sinais``() =
         Assert.Equal(HttpStatusCode.OK, response.StatusCode)
     }
 
-
+//TODO: LIDAR CORRETAMENTE COM HTML AQUI. PODE SER QUE TENHA QUE USAR O HTMLAGILITYPACK
 [<Fact>]
 let ``É possível Criar um sinal``() =
     let factory = new ControleDeSinaisWebFactory()

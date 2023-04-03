@@ -14,6 +14,8 @@
 	<_ContentIncludedByDefault Remove="views\shared\_SinalPartial.cshtml" />
     <Compile Include="Models/ErrorViewModel.fs" />
     <Compile Include="Controllers/HomeController.fs" />
+    <Compile Include="PageRefreshHub.fs" />
+    <Compile Include="Application\Refresher.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
 
@@ -24,6 +26,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="6.0.7" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Common" Version="7.0.4" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.2" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
