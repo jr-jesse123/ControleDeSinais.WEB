@@ -46,12 +46,23 @@ type ControllerLeituraBase<'a>(repositorioLeitura : ObterTodos<'a>) =
 type ControleLeituraGravaCaoBase<'a when 'a:(new:unit -> 'a)>(repositorioLeitura : ObterTodos<'a>, repositorioGravacao: Adicionar<'a>) =
     inherit ControllerLeituraBase<'a>(repositorioLeitura)
     
-    [<HttpGet>]
     abstract member Create : unit -> IActionResult 
+    [<HttpGet>]
     default this.Create() : IActionResult =
         let newRecord = new 'a()
         this.View(newRecord)
     
+
+type ControleLeituraGravaCaoComModeloEspecializadoBase<'a, 'b when 'b:(new:unit -> 'b)>(repositorioLeitura : ObterTodos<'a>, repositorioGravacao: Adicionar<'a>) =
+    inherit ControllerLeituraBase<'a>(repositorioLeitura)
+    
+    abstract member Create : unit -> IActionResult 
+    [<HttpGet>]
+    default this.Create() : IActionResult =
+        let newRecord = new 'b()
+        this.View(newRecord)
+    
+
 
 
 type PosicoesController (repositorioLeitura) =  
@@ -98,15 +109,13 @@ type AssociaCaoPosicaoModel () =
 
 //TODO: CHECAR COMO USAR CONSTRUTORES SECUNDÁRIOS PARA DESCONSTRUIR OS SINGLE CASES UNIONS
 type AssociacaoPosicaoController (repositorioLeitura , repositorioGravacao, listaSinais : ObterTodos<Sinal>) =  
-    inherit ControleLeituraGravaCaoBase<AssociacaoPosicao>(repositorioLeitura , repositorioGravacao) 
+    inherit ControleLeituraGravaCaoComModeloEspecializadoBase<AssociacaoPosicao,AssociaCaoPosicaoModel>(repositorioLeitura , repositorioGravacao) 
     let (Adicionar adicionar) =  repositorioGravacao
-    let sinais =  
-        let (ObterTodos obter ) = listaSinais
-        obter()
     
-    override this.Create() : IActionResult =
-        let newRecord  =  AssociaCaoPosicaoModel()
-        this.View(newRecord)
+    //[<HttpGet>]
+    //override this.Create() : IActionResult =
+    //    let newRecord  =  AssociaCaoPosicaoModel()
+    //    this.View(newRecord)
     
     
     //[<HttpPost>]
