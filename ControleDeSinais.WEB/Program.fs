@@ -54,7 +54,8 @@ module Program =
         builder.Services.AddSingleton<ObterTodos<AssociacaoPosicao>>(Repositorios.ObterAssociacaoPosicose)
         builder.Services.AddSingleton<Adicionar<AssociacaoPosicao>>(Repositorios.AdicionarAssociacaoPosicao)
 
-        
+        builder.Services.AddSingleton<ObterTodos<AssociacaoPatch>>(Repositorios.ObterAssociacaoPatch)
+        builder.Services.AddSingleton<Adicionar<AssociacaoPatch>>(Repositorios.AdicionarAssociacaoPatch)
         
         
         builder.Services.AddSingleton<ObterTodos<Posicao>>(ListasFixas.ObterPosices)

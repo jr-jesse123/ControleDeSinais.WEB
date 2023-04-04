@@ -96,7 +96,7 @@ type AssociaCaoPosicaoModel  =     {
         NrRack : int
         NrColuna : int
         NrLinha : string
-        TipoEntrada : TipoEntradaPosicao
+        TipoEntrada : Nullable<TipoEntradaPosicao>
         IndiceSource : int
         IndiceDestination : int
         IndiceSinal : int
@@ -119,9 +119,10 @@ type AssociacaoPosicaoController (repositorioLeitura , repositorioGravacao, repo
     member this.Create([<FromForm>](assModel: AssociaCaoPosicaoModel)) =
         let ass = 
             let entrada = 
-                match (int assModel.TipoEntrada) with
-                | 0 -> EntradaPosicao.Source({ Numero= assModel.IndiceSource })
-                | 1 -> EntradaPosicao.Destination({ Numero=  assModel.IndiceDestination})
+                match (int assModel.TipoEntrada.Value) with
+                //| null -> failwith "Escolha um tipo de Entrada"
+                | 0 -> EntradaPosicao.Source({ Numero= assModel.IndiceSource + 1 })
+                | 1 -> EntradaPosicao.Destination({ Numero=  assModel.IndiceDestination + 1})
                 | 2 -> EntradaPosicao.Sinal(sinais[assModel.IndiceSinal])
                 | _ -> failwith "Tipo de entrada não reconhecido"
 
@@ -131,3 +132,7 @@ type AssociacaoPosicaoController (repositorioLeitura , repositorioGravacao, repo
         adicionar ass
         this.RedirectToAction "Index"
         
+
+
+type AssociacaoPatchController (repositorioLeitura, repositorioGravacao) =
+    inherit ControleLeituraGravaCaoBase<AssociacaoPatch>(repositorioLeitura, repositorioGravacao)

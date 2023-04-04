@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Dominio.AssociacaoPosicao>
+﻿@model IEnumerable<Dominio.AssociacaoPatch>
 
     @{
     ViewData["Title"] = "Associação de posições";
@@ -15,21 +15,26 @@
             </tr>
         </thead>
         <tbody>
-        @foreach (var ass in Model)
-        { 
+            @foreach (var ass in Model)
+            { if(ass.IsSignal){
             <tr>
-                <td>Rack: @ass.Posicao.NrRack , Coluna : @ass.Posicao.Coluna, Linha: @ass.Posicao.Linha</td>
-                <td>@ass.EntradaPosicao.TypeName</td>
+                <td>Rack: 1 , Coluna : 1, Linha: 2</td>
+                <td>Sinal</td>
                 <td>
-                    @if(ass.EntradaPosicao.IsSignal){
+
                     @Html.Partial("_SinalPartial", new Dominio.Sinal() {Nome = "nome sinal", Descricao = "esse é um sinal da hora", Fonte = "lá do psul"})
-                    }else{
-                    <p> Número @ass.EntradaPosicao</p>
-                    }
                 </td>
 
             </tr>
-        }
+            }else{
+            <tr>
+                <td>Rack: 1 , Coluna : 1, Linha: 2</td>
+                <td>Source</td>
+                <td>Número 1</td>
+            </tr>
+            }
+
+         
 
         </tbody>
     </table>

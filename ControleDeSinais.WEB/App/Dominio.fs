@@ -39,6 +39,17 @@ type Destination = {
 }
 
 type EntradaPosicao = Source of Source| Destination of Destination | Sinal of Sinal     //não precisa repositório
+with 
+    member this.IsSignal = 
+        match this with
+        | Sinal _ -> true
+        | _ -> false
+
+    member this.TypeName = 
+        match this with
+        | Source _ -> "Source"
+        | Destination _ -> "Destination"
+        | Sinal _ -> "Sinal"
 
 [<CLIMutable>]
 type AssociacaoPosicao = {
@@ -47,6 +58,8 @@ type AssociacaoPosicao = {
     DataDeCriacao: DateTime
 }
 
+
+[<CLIMutable>]
 type AssociacaoPatch = {
     Entrada: AssociacaoPosicao
     Saida: AssociacaoPosicao
