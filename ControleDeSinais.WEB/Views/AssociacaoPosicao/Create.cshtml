@@ -34,7 +34,7 @@
 
                     <div class="form-select">
                         <label>Rack:</label>
-                        <select id="nrRack">
+                        <select id="nrRack" asp-for="NrRack" >
                             <option value=0>Escolha</option>
                             @foreach(var nr in racks ){
                             <option value="@nr">@nr </option>
@@ -43,7 +43,7 @@
                     </div>
                     <div class="form-select">
                         <label>Coluna:</label>
-                        <select id="Coluna">
+                        <select id="Coluna" asp-for="NrColuna">
                             <option value=0>Escolha</option>
                             @foreach(var nr in colunas ){
                             <option value="@nr">@nr </option>
@@ -52,7 +52,7 @@
                     </div>
                     <div class="form-select">
                         <label>linha:</label>
-                        <select id="Linha">
+                        <select id="Linha" asp-for="NrLinha">
                             <option value=0>Escolha</option>
                             @foreach(var nr in linhas ){
                             <option value="@nr">@nr </option>
@@ -75,7 +75,7 @@
                     <!-- TODO: EMPACOTAR ESTE SELECT COM VALOR 0 DE ESCOLHA -->
                     <div class="form-select">
                         <label>Qual o tipo de Associação?</label>
-                        <select id="associationTypeSelect">
+                        <select id="associationTypeSelect" asp-for="TipoEntrada">
                             <option value="0" selected>Escolha</option>
                             <option value="source">source</option>
                             <option value="destination">destination</option>
@@ -85,7 +85,7 @@
 
                     <div id="destinationPicker" class="form-select d-none">
                         <label>Escolha um Destination:</label>
-                        <select>
+                        <select asp-for="IndiceSource">
                             <option value="-1">Escolha</option>
                             @for (int i = 0; i < destinations.Count(); i++)
                             {
@@ -97,7 +97,7 @@
 
                     <div id="sourcePicker" class="form-select d-none">
                         <label>Eescolha um source</label>
-                        <select id="sourceSelect">
+                        <select id="sourceSelect" asp-for="IndiceDestination">
                             <option value=0>Escolha</option>
                             @for (int i = 0; i < sources.Count(); i++)
                             {
@@ -110,7 +110,7 @@
                     <div id="sinalPicker" class="form-select d-none">
 
                         <label for="IndicePosicao">Escolha um  sinal:</label>
-                        <select id="IndicePosicao" name="SelectedOption">
+                        <select id="IndicePosicao" name="SelectedOption" asp-for="IndiceSinal">
                             <option value=0>Escolha</option>
                             @for (int i = 0; i < sinais.Count(); i++)
                             {

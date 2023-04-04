@@ -53,7 +53,7 @@ type ControleLeituraGravaCaoBase<'a when 'a:(new:unit -> 'a)>(repositorioLeitura
         this.View(newRecord)
     
 
-type ControleLeituraGravaCaoComModeloEspecializadoBase<'a, 'b when 'b:(new:unit -> 'b)>(repositorioLeitura : ObterTodos<'a>, repositorioGravacao: Adicionar<'a>) =
+type ControleLeituraGravaCaoComModeloEspecializadoBase<'a, 'b when 'b:(new:unit -> 'b) and 'b:(new:unit -> 'b)>(repositorioLeitura : ObterTodos<'a>, repositorioGravacao: Adicionar<'a>) =
     inherit ControllerLeituraBase<'a>(repositorioLeitura)
     
     abstract member Create : unit -> IActionResult 
@@ -91,36 +91,43 @@ type TipoEntradaPosicao =
 
 
 
-
-
-//TODO: PENSAR EM INTERNACIONALIZAÇÃO DA DATA
-type AssociaCaoPosicaoModel () = 
-    [<DefaultValue>] val mutable NrRack : int
-    [<DefaultValue>] val mutable NrColuna : int
-    [<DefaultValue>] val mutable NrLinha : int
-    [<DefaultValue>] val mutable TipoEntrada : TipoEntradaPosicao
-    [<DefaultValue>] val mutable EntradaIndice : Nullable<int>
-
-
-    
-    
+[<CLIMutable>]
+type AssociaCaoPosicaoModel  =     {
+        NrRack : int
+        NrColuna : int
+        NrLinha : string
+        TipoEntrada : TipoEntradaPosicao
+        IndiceSource : int
+        IndiceDestination : int
+        IndiceSinal : int
+}
 
 
 
+//TODO: REGISTRAR AS LISTAS FIXAS DIRETAMENTE SEM O REPOSITORIO
 //TODO: CHECAR COMO USAR CONSTRUTORES SECUNDÁRIOS PARA DESCONSTRUIR OS SINGLE CASES UNIONS
-type AssociacaoPosicaoController (repositorioLeitura , repositorioGravacao, listaSinais : ObterTodos<Sinal>) =  
+//TODO: CHECHAR COMO PASSAR O VALIDADOOR POR MIDDLEWARES, ACTIONFILTER, OU HERANÇA DE MANEIRA QUE OS MODELOS POSSAM SER 
+//VALIDADOS AUTOMATICAMENTE MESMO QUE TENHAM DEPENDENCIAS PRA ISSO.
+type AssociacaoPosicaoController (repositorioLeitura , repositorioGravacao, repositorioSinais: ObterTodos<Sinal>) =  
     inherit ControleLeituraGravaCaoComModeloEspecializadoBase<AssociacaoPosicao,AssociaCaoPosicaoModel>(repositorioLeitura , repositorioGravacao) 
     let (Adicionar adicionar) =  repositorioGravacao
+    let sinais = repositorioSinais.Items()
     
-    //[<HttpGet>]
-    //override this.Create() : IActionResult =
-    //    let newRecord  =  AssociaCaoPosicaoModel()
-    //    this.View(newRecord)
-    
-    
-    //[<HttpPost>]
-    //member this.Create(nome: string, descricao: string, fonte: string) =
-    //    let novoSinal = {Nome=nome;Descricao = descricao;Fonte=fonte}
-    //    adicionar novoSinal
-    //    this.RedirectToAction "Index"
+    //TODO: LIDAR COM O INDICE + - 1 NA HORA DE ASSOCIAR POR INDICE
+    //TODO: CRIAR TESTES PARA CRIAÇÃO DE ASSOCIAÇÃO COM SINAIS E INDICE
+    [<HttpPost>]
+    member this.Create([<FromForm>](assModel: AssociaCaoPosicaoModel)) =
+        let ass = 
+            let entrada = 
+                match (int assModel.TipoEntrada) with
+                | 0 -> EntradaPosicao.Source({ Numero= assModel.IndiceSource })
+                | 1 -> EntradaPosicao.Destination({ Numero=  assModel.IndiceDestination})
+                | 2 -> EntradaPosicao.Sinal(sinais[assModel.IndiceSinal])
+                | _ -> failwith "Tipo de entrada não reconhecido"
+
+            let posicao = {NrRack = assModel.NrRack; Coluna = assModel.NrColuna; Linha = assModel.NrLinha}
+            {Posicao = posicao; EntradaPosicao = entrada; DataDeCriacao = DateTime.Now}
+
+        adicionar ass
+        this.RedirectToAction "Index"
         
