@@ -22,9 +22,9 @@
                 <td>@ass.EntradaPosicao.TypeName</td>
                 <td>
                     @if(ass.EntradaPosicao.IsSignal){
-                    @Html.Partial("_SinalPartial", new Dominio.Sinal() {Nome = "nome sinal", Descricao = "esse é um sinal da hora", Fonte = "lá do psul"})
+                    @Html.Partial("_SinalPartial", ass.EntradaPosicao.GetSinal)
                     }else{
-                    <p> Número @ass.EntradaPosicao</p>
+                    <p>@ass.EntradaPosicao</p>
                     }
                 </td>
 

@@ -6,23 +6,24 @@
 
     <h1>Posicoes</h1>
 
-    <table class="table">
+    <!--<table class="table">
         <thead>
-            <tr>
-                <th>Rack</th>
+            <tr>-->
+                <!--<th>Rack</th>
                 <th>Descricao</th>
-                <th>Linha</th>
-            </tr>
+                <th>Linha</th>-->
+            <!--</tr>
         </thead>
-        <tbody>
+        <tbody>-->
             @foreach (var pos in Model)
             {
-            <tr>
-                <td>@pos.NrRack</td>
+            <div>
+                <!--<td>@pos.NrRack</td>
                 <td>@pos.Coluna</td>
-                <td>@pos.Linha</td>
-            </tr>
+                <td>@pos.Linha</td>-->
+                @Html.Partial("_Posicao",@pos)
+            </div>
             }
-        </tbody>
-    </table>
+<!--        </tbody>-->
+    <!--</table>-->
     

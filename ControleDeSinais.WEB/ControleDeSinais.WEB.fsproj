@@ -10,7 +10,9 @@
 	<Compile Include="App\Dominio.fs" />
 	<Compile Include="App\InfraEstrutura.fs" />
 	<Compile Include="Migrations/*.fs" />
+	<Content Remove="views\shared\_Posicao.cshtml" />
 	<Content Remove="views\shared\_SinalPartial.cshtml" />
+	<_ContentIncludedByDefault Remove="views\shared\_Posicao.cshtml" />
 	<_ContentIncludedByDefault Remove="views\shared\_SinalPartial.cshtml" />
     <Compile Include="Models/ErrorViewModel.fs" />
     <Compile Include="Controllers/HomeController.fs" />
@@ -21,6 +23,7 @@
 
   <ItemGroup>
     <None Include="Dockerfile" />
+    <None Include="views\shared\_Posicao.cshtml" />
     <None Include="views\shared\_SinalPartial.cshtml" />
   </ItemGroup>
 

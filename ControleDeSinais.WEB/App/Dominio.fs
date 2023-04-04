@@ -51,6 +51,13 @@ with
         | Destination _ -> "Destination"
         | Sinal _ -> "Sinal"
 
+    member this.GetSinal =
+        match this with
+        | Sinal s -> s
+        | _ -> failwith "Não é um sinal"
+
+//TODO: VERIFICAR SE OS MÉTODOS UTILIZADOS PARA VIEW PODEM FICAR NA CAMADA DE VIEW.
+
 [<CLIMutable>]
 type AssociacaoPosicao = {
     Posicao: Posicao
