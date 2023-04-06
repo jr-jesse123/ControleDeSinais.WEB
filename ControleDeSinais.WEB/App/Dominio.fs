@@ -56,6 +56,12 @@ with
         | Sinal s -> s
         | _ -> failwith "Não é um sinal"
 
+    member this.GetNumero =
+        match this with
+        | Source s -> s.Numero
+        | Destination d -> d.Numero
+        | Sinal s -> failwith "sinal não tem número"
+
 //TODO: VERIFICAR SE OS MÉTODOS UTILIZADOS PARA VIEW PODEM FICAR NA CAMADA DE VIEW.
 
 [<CLIMutable>]
@@ -71,9 +77,9 @@ type AssociacaoPatch = {
     Entrada: AssociacaoPosicao
     Saida: AssociacaoPosicao
     DataDeCriacao: DateTime
-    PrevisaoDeRemocao: DateOnly
+    PrevisaoDeRemocao: DateTime
     Descricao: string
-    Ativo: bool
+    Ativo: bool    //TODO: ADICINAR ESSE USE CASE NA PÁGINA DE  LISTA DE PATCHS
 }
 
 type SinalPlatinum = Source of Source | Destination of Destination         //não precisa repositório

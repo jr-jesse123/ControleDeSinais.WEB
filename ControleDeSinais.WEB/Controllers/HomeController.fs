@@ -11,6 +11,7 @@ open Dominio
 open System.Security.Cryptography
 open Newtonsoft.Json.Linq
 open System
+open System.IO
 
 
 type HomeController (logger : ILogger<HomeController>) =
@@ -134,5 +135,17 @@ type AssociacaoPosicaoController (repositorioLeitura , repositorioGravacao, repo
         
 
 
-type AssociacaoPatchController (repositorioLeitura, repositorioGravacao) =
+type AssociacaoPatchController (repositorioLeitura, repositorioGravacao, assPosicaoRepositorio : ObterTodos<AssociacaoPosicao>) =
     inherit ControleLeituraGravaCaoBase<AssociacaoPatch>(repositorioLeitura, repositorioGravacao)
+    let assPosicoes = assPosicaoRepositorio.Items()
+    //TODO: EXPERIMENTAR USAR OS SERIALIZADORES
+    let (Adicionar adicionar ) = repositorioGravacao
+    [<HttpPost>]
+    member this.Create(entradaIndice, saidaIndice, previsaoDeRemocao ,  descricao )= 
+        let entrada = assPosicoes[entradaIndice]
+        let saida = assPosicoes[saidaIndice]
+        let patch = {AssociacaoPatch.Entrada = entrada; Saida = saida; PrevisaoDeRemocao = previsaoDeRemocao; Descricao = descricao; DataDeCriacao = System.DateTime.Now; Ativo = true}
+
+        adicionar patch
+
+        this.RedirectToAction("Index")

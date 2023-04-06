@@ -1,0 +1,13 @@
+@model Dominio.AssociacaoPosicao
+
+<div class="row border-top py-2">
+    <div class="col-md-4">Rack: @Model.Posicao.NrRack , Coluna : @Model.Posicao.Coluna, Linha: @Model.Posicao.Linha</div>
+    <div class="col-md-4">@Model.EntradaPosicao.TypeName</div>
+    <div class="col-md-4">
+        @if(Model.EntradaPosicao.IsSignal){
+        @Html.Partial("_SinalPartial", Model.EntradaPosicao.GetSinal)
+        }else{
+        <p> Nr: @Model.EntradaPosicao.GetNumero</p> <!--TODO: DESCOBRIR COMO INCLUIR O ACENTO CORRETAMENTE AQUI --> 
+        }
+    </div>
+</div>

@@ -6,34 +6,17 @@
 
     <h1>Associação de posições</h1>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Posicao</th>
-                <th>EntradaPosicao</th>
-                <th>Detalhes</th>
-            </tr>
-        </thead>
-        <tbody>
+    <div class="container">
+        <div class="row bg-light text-dark font-weight-bold py-2">
+            <div class="col-md-4">Posicao</div>
+            <div class="col-md-4">EntradaPosicao</div>
+            <div class="col-md-4">Detalhes</div>
+        </div>
+
         @foreach (var ass in Model)
-        { 
-            <tr>
-                <td>Rack: @ass.Posicao.NrRack , Coluna : @ass.Posicao.Coluna, Linha: @ass.Posicao.Linha</td>
-                <td>@ass.EntradaPosicao.TypeName</td>
-                <td>
-                    @if(ass.EntradaPosicao.IsSignal){
-                    @Html.Partial("_SinalPartial", ass.EntradaPosicao.GetSinal)
-                    }else{
-                    <p>@ass.EntradaPosicao</p>
-                    }
-                </td>
-
-            </tr>
+        {
+            @Html.Partial("_AssociacaoPosicaoRowPartial", ass);
         }
+    </div>
 
-        </tbody>
-    </table>
-    <a asp-action="Create" class="btn btn-primary">Adicionar Associacao</a>
-
-
-
+    <a asp-action="Create" class="btn btn-primary mt-3">Adicionar Associacao</a>

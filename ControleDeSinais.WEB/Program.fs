@@ -1,13 +1,13 @@
 namespace ControleDeSinais.WEB
 
+
+
+
 open Interfaces
 open Dominio
 open InfraEstrutura.Persistencia
 open Microsoft.AspNetCore.SignalR
 open Microsoft.Extensions.Hosting
-
-#nowarn "20"
-
 open System
 open System.Collections.Generic
 open System.IO
@@ -25,7 +25,18 @@ open Microsoft.AspNetCore.Http
 type Program() =
     class end
 
+type IJsonSerializer = interface
+    abstract Serialize : obj -> string
+end 
 
+type IJsonUnSerializer<'a> = interface
+    abstract UnSerialize<'a> :  string -> 'a    
+end
+
+type JsonUnSerializer<'a when 'a: (new: unit -> 'a)>() =
+    interface IJsonUnSerializer<'a> with
+        member this.UnSerialize<'a> obj =
+            Newtonsoft.Json.JsonConvert.DeserializeObject<'a> obj
 
 module Program =
     let exitCode = 0
@@ -61,6 +72,23 @@ module Program =
         builder.Services.AddSingleton<ObterTodos<Posicao>>(ListasFixas.ObterPosices)
         builder.Services.AddSingleton<ObterTodos<Destination>>(ListasFixas.ObterDestinations)
         builder.Services.AddSingleton<ObterTodos<Source>>(ListasFixas.ObterSources)
+
+        builder.Services.AddSingleton<IJsonSerializer>({new IJsonSerializer with
+                                                            member this.Serialize(arg1: obj): string = 
+                                                                Newtonsoft.Json.JsonConvert.SerializeObject arg1 })
+
+
+        
+        builder.Services.AddSingleton(typeof<IJsonUnSerializer<_>>, typeof<JsonUnSerializer<_>>)
+        //builder.services.Add(ServiceDescriptor.Scoped(typeof<IRepository<_>>, typeof(Repository<_>)) :> IServiceDescriptor)
+
+
+//        builder.Services.AddSingleton(typeof<IJsonUnSerializer<>>, fun sp ->  {new IJsonUnSerializer<_> with
+//                                                                                    member this.UnSerialize<_> obj =
+//                                                                                        Newtonsoft.Json.JsonConvert.DeserializeObject<_> obj       })
+////<IJsonUnSerializer<_>>()
+        
+
         
 
         
