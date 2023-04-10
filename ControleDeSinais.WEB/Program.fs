@@ -69,9 +69,16 @@ module Program =
         builder.Services.AddSingleton<Adicionar<AssociacaoPatch>>(Repositorios.AdicionarAssociacaoPatch)
         
         
+        builder.Services.AddSingleton<ObterTodos<AssociacaoPlatinum>>(Repositorios.ObterAssociacaoPlatinum)
+        builder.Services.AddSingleton<Adicionar<AssociacaoPlatinum>>(Repositorios.AdicionarAssociacaoPlatinum)
+        
+
         builder.Services.AddSingleton<ObterTodos<Posicao>>(ListasFixas.ObterPosices)
         builder.Services.AddSingleton<ObterTodos<Destination>>(ListasFixas.ObterDestinations)
         builder.Services.AddSingleton<ObterTodos<Source>>(ListasFixas.ObterSources)
+
+        
+
 
         builder.Services.AddSingleton<IJsonSerializer>({new IJsonSerializer with
                                                             member this.Serialize(arg1: obj): string = 

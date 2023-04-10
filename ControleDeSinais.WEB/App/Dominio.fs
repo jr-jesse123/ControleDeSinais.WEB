@@ -87,6 +87,7 @@ type SinalPlatinum = Source of Source | Destination of Destination         //nã
 //historico
 // usuário pode adicionar
 // usuário pode desassociar (criar uma nova associação sem sinal)
+[<CLIMutable>]
 type AssociacaoPlatinum ={
     SinalPlatinum: SinalPlatinum * Posicao
     Sinal :  (Sinal * Posicao) option

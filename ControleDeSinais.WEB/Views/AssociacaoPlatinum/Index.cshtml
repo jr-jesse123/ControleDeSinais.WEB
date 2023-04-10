@@ -1,0 +1,35 @@
+﻿@model IEnumerable<Dominio.AssociacaoPlatinum>
+
+    @{
+    ViewData["Title"] = "Associação Patchs";
+    }
+
+    <h1>Associação de posições</h1>
+    <!--TODO: TROCAR PRA BOOTSTRAP TABLE-->
+    
+    <!-- bootstrap card -->
+        @foreach (var ass in Model)
+        {
+        <div class="card">
+            <h5 class="card-title">Patch</h5>
+            <div class="card-body">
+
+                <span>Entrada:</span> @Html.Partial("_AssociacaoPosicaoRowPartial", ass.Entrada)
+                <span>Sainda:</span> @Html.Partial("_AssociacaoPosicaoRowPartial", ass.Saida)
+                <span>
+                    Previsão de Remoção: @ass.PrevisaoDeRemocao
+                </span>
+                <div>Descrição: @ass.Descricao </div>
+                <div>Estado: @(ass.Ativo ?  "Ativo" : "Desativado")</div>
+                <!-- Criar sistema que mostra a associaçãoq ue desativou este camarada -->
+            </div>
+        </div>
+        }
+
+
+    
+
+    <a asp-action="Create" class="btn btn-primary">Adicionar Associacao</a>
+
+
+

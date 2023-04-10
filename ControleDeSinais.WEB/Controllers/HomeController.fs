@@ -134,12 +134,25 @@ type AssociacaoPosicaoController (repositorioLeitura , repositorioGravacao, repo
         this.RedirectToAction "Index"
         
 
+//TODO: CRIAR MÓDELS ESPECIALIZADOS PARA TUDO
+type AssociacaoPatchModel ()  =
+    [<DefaultValue>] val mutable IndiceEntrada : int
+    [<DefaultValue>] val mutable IndiceSaida : int
+    [<DefaultValue>] val mutable Ativo : bool
+    [<DefaultValue>] val mutable Descricao : string
+    member val PrevisaoDeRemocao = DateTime.Now with get, set
+    
 
 type AssociacaoPatchController (repositorioLeitura, repositorioGravacao, assPosicaoRepositorio : ObterTodos<AssociacaoPosicao>) =
     inherit ControleLeituraGravaCaoBase<AssociacaoPatch>(repositorioLeitura, repositorioGravacao)
     let assPosicoes = assPosicaoRepositorio.Items()
     //TODO: EXPERIMENTAR USAR OS SERIALIZADORES
     let (Adicionar adicionar ) = repositorioGravacao
+
+    override this.Create() =
+        let x = new AssociacaoPatchModel()
+        this.View(x)
+
     [<HttpPost>]
     member this.Create(entradaIndice, saidaIndice, previsaoDeRemocao ,  descricao )= 
         let entrada = assPosicoes[entradaIndice]
@@ -149,3 +162,9 @@ type AssociacaoPatchController (repositorioLeitura, repositorioGravacao, assPosi
         adicionar patch
 
         this.RedirectToAction("Index")
+
+
+type AssociacaoPlatinumController (leitura, gravacao) =
+    inherit ControleLeituraGravaCaoBase<AssociacaoPlatinum>(leitura,gravacao)
+
+
