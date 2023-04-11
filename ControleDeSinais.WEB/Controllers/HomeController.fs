@@ -164,6 +164,8 @@ type AssociacaoPatchController (repositorioLeitura, repositorioGravacao, assPosi
         this.RedirectToAction("Index")
 
 
+
+
 type AssociacaoPlatinumController (leitura, gravacao) =
     inherit ControleLeituraGravaCaoBase<AssociacaoPlatinum>(leitura,gravacao)
 

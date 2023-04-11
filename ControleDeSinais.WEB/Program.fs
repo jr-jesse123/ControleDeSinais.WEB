@@ -2,7 +2,7 @@ namespace ControleDeSinais.WEB
 
 
 
-
+open Microsoft.AspNetCore.Mvc.Rendering
 open Interfaces
 open Dominio
 open InfraEstrutura.Persistencia
@@ -39,6 +39,13 @@ type JsonUnSerializer<'a when 'a: (new: unit -> 'a)>() =
             Newtonsoft.Json.JsonConvert.DeserializeObject<'a> obj
 
 module Program =
+    let toListItem (x:obj) =
+        new SelectListItem(x.ToString(), x.ToString())
+    
+    let toListItems (x:obj seq) =
+        x |> Seq.map toListItem
+
+
     let exitCode = 0
 
     [<EntryPoint>]
@@ -76,6 +83,8 @@ module Program =
         builder.Services.AddSingleton<ObterTodos<Posicao>>(ListasFixas.ObterPosices)
         builder.Services.AddSingleton<ObterTodos<Destination>>(ListasFixas.ObterDestinations)
         builder.Services.AddSingleton<ObterTodos<Source>>(ListasFixas.ObterSources)
+
+        builder.Services.AddSingleton(toListItems)
 
         
 
