@@ -1,19 +1,20 @@
-@model Dominio.AssociacaoPlatinum
+@model  ControleDeSinais.WEB.Controllers.AssociacaoPlatinumModel
 @using Dominio;
 @using System.Linq;
 @using Interfaces
 @using Microsoft.AspNetCore.Mvc.Rendering
+@using InfraEstrutura.Persistencia
 @inject ObterTodos<Dominio.Destination> destinatinosRepo
 @inject ObterTodos<Dominio.Source> sourcesRepo
 @inject ObterTodos<Dominio.Posicao> posicoesRepo
-@inject ObterTodos<Dominio.Sinal> sinaisRepo
+@inject ObterTodos<Dominio.Sinal>    sinaisRepo
+    @inject IJsonSerializer serializer
 
-    
     @{
-        var destinations = destinatinosRepo.Items().Select(x => new SelectListItem(x.ToString(), x.ToString()) );
-        var sources = sourcesRepo.Items().Select(x => new SelectListItem(x.ToString(), x.ToString()) );
-        var posicoes = posicoesRepo.Items().Select(x => new SelectListItem(x.ToString(), x.ToString()) );
-        var sinais = sinaisRepo.Items().Select(x => new SelectListItem(x.ToString(), x.ToString()) );
+    var destinations = destinatinosRepo.Items().Select(x => new SelectListItem(x.ToString(),serializer.Serialize(x)) );
+    var sources = sourcesRepo.Items().Select(x => new SelectListItem(x.ToString(),serializer.Serialize(x) ) );
+    var posicoes = posicoesRepo.Items().Select(x => new SelectListItem(x.ToString(),serializer.Serialize(x)) );
+    var sinais = sinaisRepo.Items().Select(x => new SelectListItem(x.ToString(),serializer.Serialize(x)) );
     }
 
 
@@ -29,7 +30,7 @@
                     <!-- TODO: EMPACOTAR ESTE SELECT COM VALOR 0 DE ESCOLHA -->
                     <div class="form-select">
                         <label>Qual o tipo de Platinum?</label>
-                        <select id="associationTypeSelect">
+                        <select id="associationTypeSelect" asp-for="TipoPlatinum">
                             <option>Escolha</option>
                             <option value="source">source</option>
                             <option value="destination">destination</option>
@@ -38,15 +39,15 @@
 
                     <div id="destinationPicker" class="form-select d-none">
                         <label>Escolha um Destination:</label>
-                        <select asp-items="destinations">
-                            <option value="-1">Escolha</option>
+                        <select asp-items="destinations" asp-for="Destination" asp-items="destinations">
+                            <option value="0">Escolha</option>
 
                         </select>
                     </div>
 
                     <div id="sourcePicker" class="form-select d-none">
                         <label>Eescolha um source</label>
-                        <select id="sourceSelect" asp-items="sources">
+                        <select id="sourceSelect" asp-items="sources" asp-for="Source">
                             <option value=0>Escolha</option>
 
                         </select>
@@ -55,7 +56,7 @@
 
                     <div id="sourcePicker" class="form-select">
                         <label>Eescolha uma posoição</label>
-                        <select id="sourceSelect" asp-items="posicoes">
+                        <select id="sourceSelect" asp-items="posicoes" asp-for="Posicao">
                             <option value=0>Escolha</option>
                         </select>
                     </div>
@@ -85,7 +86,7 @@
                         <select id="SinalSelect" asp-items="sinais">
                         </select>
                     </div>
-                    <div class="form-select d-none" id="PosicaoSelect2" >
+                    <div class="form-select d-none" id="PosicaoSelect2">
                         <label>Escolha uma posicao?</label>
                         <select id="associationTypeSelect" asp-items="posicoes">
                         </select>
@@ -124,14 +125,9 @@
                 case '1':
                     document.querySelector('#SinalSelect2').classList.remove('d-none')
                     document.querySelector('#PosicaoSelect2').classList.remove('d-none')
-                break;
+                    break;
             }
         }
-
-
-
-
-
 
 
 
@@ -159,7 +155,7 @@
         }
 
 
-        
+
 
 
 

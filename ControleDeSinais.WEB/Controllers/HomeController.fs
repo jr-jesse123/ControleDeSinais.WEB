@@ -12,6 +12,9 @@ open System.Security.Cryptography
 open Newtonsoft.Json.Linq
 open System
 open System.IO
+open InfraEstrutura.Persistencia.ListasFixas
+open InfraEstrutura.Persistencia.ListasFixas
+
 
 
 type HomeController (logger : ILogger<HomeController>) =
@@ -50,18 +53,17 @@ type ControleLeituraGravaCaoBase<'a when 'a:(new:unit -> 'a)>(repositorioLeitura
     abstract member Create : unit -> IActionResult 
     [<HttpGet>]
     default this.Create() : IActionResult =
-        let newRecord = new 'a()
-        this.View(newRecord)
+        
+        this.View()
     
-
+//TODO: REMOVER ISTO JÁ QUE PODEMOS PASSAR NULO PARA AS MODELS
 type ControleLeituraGravaCaoComModeloEspecializadoBase<'a, 'b when 'b:(new:unit -> 'b) and 'b:(new:unit -> 'b)>(repositorioLeitura : ObterTodos<'a>, repositorioGravacao: Adicionar<'a>) =
     inherit ControllerLeituraBase<'a>(repositorioLeitura)
     
     abstract member Create : unit -> IActionResult 
     [<HttpGet>]
     default this.Create() : IActionResult =
-        let newRecord = new 'b()
-        this.View(newRecord)
+        this.View()
     
 
 
@@ -73,7 +75,7 @@ type DestinationsController (repositorioLeitura) =
     inherit ControllerLeituraBase<Destination>(repositorioLeitura ) 
         
 type SourcesController (repositorioLeitura) =  
-    inherit ControllerLeituraBase<Destination>(repositorioLeitura ) 
+    inherit ControllerLeituraBase<Source>(repositorioLeitura ) 
 
 
 type SinaisController (repositorioLeitura , repositorioGravacao) =  
@@ -163,10 +165,43 @@ type AssociacaoPatchController (repositorioLeitura, repositorioGravacao, assPosi
 
         this.RedirectToAction("Index")
 
+//TODO: TESTAR SE TROCANDO O SERIALIZADOR PADRÃO PARA NEWTONSOFT, É POSSÍVEL TER O BIND DE RECORDS E DU AUTOMATICAMENTE
+
+type AssociacaoPlatinumModel() =
+    
+    member val TipoPlatinum ="" with get,set
+    //[<DefaultValue>] val mutable TipoPlatinum : int
+    member val Source = "" with  get,set
+    member val Destination = ""  with get,set
+    member val Posicao : string = "" with get,set
+    member val TemSinal: bool = false with get,set
+    member val Sinal : string  = "" with get,set
+    member val PosicaoSinal : string = "" with get,set
 
 
 
-type AssociacaoPlatinumController (leitura, gravacao) =
-    inherit ControleLeituraGravaCaoBase<AssociacaoPlatinum>(leitura,gravacao)
 
+open InfraEstrutura.Persistencia
 
+type AssociacaoPlatinumController (leitura, gravacao, unserializer:IJsonUnSerializer) =
+    inherit ControleLeituraGravaCaoComModeloEspecializadoBase<AssociacaoPlatinum,AssociacaoPlatinumModel>(leitura,gravacao)
+    
+    let (Adicionar adicionar) = gravacao
+    
+    [<HttpPost>]
+    member this.Create(model:AssociacaoPlatinumModel) =
+        ()
+        let platinum = 
+            if model.TipoPlatinum = "source" then (SinalPlatinum.Source <|  unserializer.UnSerialize<Source>  model.Source, unserializer.UnSerialize<Posicao>  model.Posicao) 
+            else (SinalPlatinum.Destination <| unserializer.UnSerialize<Destination>  model.Destination , unserializer.UnSerialize<Posicao>  model.Posicao)
+        
+        let sinal = 
+            if model.TemSinal then 
+                Some ( unserializer.UnSerialize<Sinal>  model.Sinal, unserializer.UnSerialize<Posicao>  model.PosicaoSinal)
+            else
+                None
+
+        let newAss =  AssociacaoPlatinum.create platinum  sinal  DateTime.Now
+        adicionar newAss
+
+        this.RedirectToAction("Index")

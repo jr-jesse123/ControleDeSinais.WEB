@@ -81,6 +81,25 @@ module RepositoriosJsonGenericos =
 open RepositoriosJsonGenericos
 
 
+type IJsonSerializer = interface
+    abstract Serialize : obj -> string
+end 
+
+type IJsonUnSerializer = interface
+    abstract UnSerialize<'a> :  string -> 'a    
+end
+
+type JsonSerializer () = 
+    interface IJsonSerializer with
+        member this.Serialize(arg1: obj): string = 
+            Newtonsoft.Json.JsonConvert.SerializeObject arg1 
+
+type JsonUnSerializer() =
+    interface IJsonUnSerializer with
+        member this.UnSerialize<'a> obj =
+            Newtonsoft.Json.JsonConvert.DeserializeObject<'a> obj
+
+
 module Repositorios = 
     
     let AdicionarSinal = Adicionar AdicionarEntidadeAoJson<Sinal>

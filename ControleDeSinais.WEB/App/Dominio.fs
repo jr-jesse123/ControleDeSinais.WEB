@@ -91,7 +91,7 @@ type SinalPlatinum = Source of Source | Destination of Destination         //nã
 type AssociacaoPlatinum ={
     SinalPlatinum: SinalPlatinum * Posicao
     Sinal :  (Sinal * Posicao) option
-    DataDeCriacao: DateOnly
+    DataDeCriacao: DateTime
 }
 module AssociacaoPlatinum = 
     let create sinalPlatinum sinal dataDeCriacao = 

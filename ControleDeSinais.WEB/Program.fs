@@ -25,19 +25,6 @@ open Microsoft.AspNetCore.Http
 type Program() =
     class end
 
-type IJsonSerializer = interface
-    abstract Serialize : obj -> string
-end 
-
-type IJsonUnSerializer<'a> = interface
-    abstract UnSerialize<'a> :  string -> 'a    
-end
-
-type JsonUnSerializer<'a when 'a: (new: unit -> 'a)>() =
-    interface IJsonUnSerializer<'a> with
-        member this.UnSerialize<'a> obj =
-            Newtonsoft.Json.JsonConvert.DeserializeObject<'a> obj
-
 module Program =
     let toListItem (x:obj) =
         new SelectListItem(x.ToString(), x.ToString())
@@ -89,13 +76,12 @@ module Program =
         
 
 
-        builder.Services.AddSingleton<IJsonSerializer>({new IJsonSerializer with
-                                                            member this.Serialize(arg1: obj): string = 
-                                                                Newtonsoft.Json.JsonConvert.SerializeObject arg1 })
+        builder.Services.AddSingleton<IJsonSerializer>(JsonSerializer())
 
 
         
-        builder.Services.AddSingleton(typeof<IJsonUnSerializer<_>>, typeof<JsonUnSerializer<_>>)
+        //builder.Services.AddSingleton(typeof<IJsonUnSerializer<_>>, typeof<JsonUnSerializer<_>>)
+        builder.Services.AddSingleton<IJsonUnSerializer>(JsonUnSerializer())
         //builder.services.Add(ServiceDescriptor.Scoped(typeof<IRepository<_>>, typeof(Repository<_>)) :> IServiceDescriptor)
 
 
