@@ -93,8 +93,8 @@ module Program =
 
         
 
-        
-        builder.Services.AddHostedService<Refresher.ViewWatherIHostedService>()
+        if (builder.Environment.IsDevelopment()) then 
+            builder.Services.AddHostedService<Refresher.ViewWatherIHostedService>() |> ignore
 
 
         let app = builder.Build()
