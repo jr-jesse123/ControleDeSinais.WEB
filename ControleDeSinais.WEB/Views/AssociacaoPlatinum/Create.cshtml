@@ -76,19 +76,19 @@
                     <!-- TODO: EMPACOTAR ESTE SELECT COM VALOR 0 DE ESCOLHA -->
                     <div class="form-select">
                         <label>Deseja usar sinal?</label>
-                        <select id="associationTypeSelect">
-                            <option value="0">Não</option>
-                            <option value="1">Sim</option>
+                        <select id="associationTypeSelect" asp-for="TemSinal">
+                            <option value=false>Não</option>
+                            <option value=true>Sim</option>
                         </select>
                     </div>
-                    <div class="form-select d-none" id="SinalSelect2">
+                    <div class="form-select d-none" id="SinalSelect2" >
                         <label>Escolha o sinal</label>
-                        <select id="SinalSelect" asp-items="sinais">
+                        <select id="SinalSelect" asp-items="sinais" asp-for="Sinal">
                         </select>
                     </div>
-                    <div class="form-select d-none" id="PosicaoSelect2">
+                    <div class="form-select d-none" id="PosicaoSelect2" >
                         <label>Escolha uma posicao?</label>
-                        <select id="associationTypeSelect" asp-items="posicoes">
+                        <select id="associationTypeSelect" asp-items="posicoes" asp-for="PosicaoSinal">
                         </select>
                     </div>
 
@@ -116,13 +116,13 @@
 
             switch (v.target.value) {
 
-                case '0':
+                case 'false':
                     document.querySelector('#SinalSelect2').classList.add('d-none')
                     document.querySelector('#PosicaoSelect2').classList.add('d-none')
                     //EsconderElemento('#SinalSelect2')
                     //EsconderElemento('#PosicaoSelect2')
                     break;
-                case '1':
+                case 'true':
                     document.querySelector('#SinalSelect2').classList.remove('d-none')
                     document.querySelector('#PosicaoSelect2').classList.remove('d-none')
                     break;
