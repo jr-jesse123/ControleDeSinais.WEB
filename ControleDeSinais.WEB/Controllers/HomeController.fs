@@ -21,10 +21,10 @@ type HomeController (logger : ILogger<HomeController>) =
     inherit Controller()
 
     member this.Index () =
-        this.RedirectToAction("Index",controllerName="Sinais")
-
-    member this.Privacy () =
         this.View()
+
+    //member this.Privacy () =
+    //    this.View()
 
     [<ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)>]
     member this.Error () =
@@ -166,9 +166,11 @@ type AssociacaoPatchController (repositorioLeitura, repositorioGravacao, assPosi
         this.RedirectToAction("Index")
 
 //TODO: TESTAR SE TROCANDO O SERIALIZADOR PADRÃO PARA NEWTONSOFT, É POSSÍVEL TER O BIND DE RECORDS E DU AUTOMATICAMENTE
+           
+           
+open InfraEstrutura.Persistencia
 
 type AssociacaoPlatinumModel() =
-    
     member val TipoPlatinum ="" with get,set
     //[<DefaultValue>] val mutable TipoPlatinum : int
     member val Source = "" with  get,set
@@ -178,16 +180,45 @@ type AssociacaoPlatinumModel() =
     member val Sinal : string  = "" with get,set
     member val PosicaoSinal : string = "" with get,set
 
+    //member this.FromDoamin (source: AssociacaoPlatinum) (serializer:IJsonSerializer) =
+    //    let tipoPlatinum, posicaoPlatinum, numeroPLatinum = 
+    //        match source.SinalPlatinum with
+    //        | (SinalPlatinum.Source s, p ) -> "source" , serializer.Serialize p , s.Numero
+    //        | (SinalPlatinum.Destination d, p ) -> "destination", serializer.Serialize  p, d.Numero
+    //        | _ -> exn("sinal platinum desconhecido") |> raise
+
+    //    let temSinal, sinal, PosicaoSinal =
+    //        match source.Sinal with
+    //        |Some (s, p) -> true , serializer.Serialize s, serializer.Serialize p
+    //        |None -> false, "", ""
+
+    //    new AssociacaoPlatinumModel(
+    //        TipoPlatinum = tipoPlatinum
+    //        Source = 
+    //    )
 
 
 
-open InfraEstrutura.Persistencia
 
-type AssociacaoPlatinumController (leitura, gravacao, unserializer:IJsonUnSerializer) =
-    inherit ControleLeituraGravaCaoComModeloEspecializadoBase<AssociacaoPlatinum,AssociacaoPlatinumModel>(leitura,gravacao)
+
+open System.Collections.Generic
+
+type AssociacaoPlatinumController (leitura : ObterTodos<AssociacaoPlatinum>, gravacao, unserializer:IJsonUnSerializer) =
+    //inherit ControleLeituraGravaCaoComModeloEspecializadoBase<AssociacaoPlatinum,AssociacaoPlatinumModel>(leitura,gravacao)
+    inherit Controller()
     
     let (Adicionar adicionar) = gravacao
-    
+    let (ObterTodos obter)  = leitura
+
+    member this.Index() =
+
+
+
+        this.View(obter())
+
+    member this.Create() =
+        this.View()
+ 
     [<HttpPost>]
     member this.Create(model:AssociacaoPlatinumModel) =
         ()

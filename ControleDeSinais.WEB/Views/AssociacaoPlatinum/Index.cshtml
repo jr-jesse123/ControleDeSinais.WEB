@@ -1,4 +1,5 @@
-﻿@model IEnumerable<Dominio.AssociacaoPlatinum>
+﻿@using Dominio
+@model IEnumerable<Dominio.AssociacaoPlatinum>
 
     @{
     ViewData["Title"] = "Associação Platinum";
@@ -12,8 +13,43 @@
 
         @foreach (var ass in Model)
         {
+            <div class="card">
+                <div class="card-title fw-bold">Associação</div>
+                <div class="card-body">
+                    <div>
+                        <p>SinalPlatinum:</p> 
+                        <div class="px-3">
+                            @(ass.SinalPlatinum.Item1.EhSource ?  "Source" : "Destination") Numero: @ass.SinalPlatinum.Item1.Numero | Posicao: @ass.SinalPlatinum.Item2
+                        </div>
+                    </div>
+                    <div class="my-3">
+                        @if(ass.Sinal != null){
+
+                        <p>Com Sinal:</p>
+
+                        <div class="px-3">
+                            <p>Nome: @ass.Sinal.ToString()</p>
+                            <p>Nome: @ass.Sinal.Value.Item1.Nome</p>
+                            <p>Descrição: @ass.Sinal.Value.Item1.Descricao</p>
+                            <p>Descrição: @ass.Sinal.Value.Item1.Fonte</p>
+                            <p>Posição: @ass.Sinal.Value.Item2</p>
+                        </div>
+
+                        }
+
+
+
+                    </div>
+                    
+                    
+
+                    
+
+
+                </div>
+            </div>
+            
                 
-            <div>@ass.ToString()</div>
         }
     </div>
 
